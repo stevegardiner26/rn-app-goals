@@ -2,35 +2,23 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Button, TextInput, ScrollView, FlatList } from 'react-native';
 
+import GoalItem from './components/GoalItem'
+import GoalInput from './components/GoalInput'
+
 export default function App() {
-  const [enteredGoal, setEnteredGoal] = useState('');
   const [courseGoals, setCourseGoals] = useState([]);
   
-  const goalInputHandler = (enteredText) => {
-    setEnteredGoal(enteredText);
-  }
-
-  const addGoalHandler = () => {
-    setCourseGoals(currentGoals => [...currentGoals, {key: Math.random().toString(), value: enteredGoal}]);
+  const addGoalHandler = goal => {
+    setCourseGoals(currentGoals => [...currentGoals, {key: Math.random().toString(), value: goal}]);
   }
 
   return (
     <View style={styles.container}>
-      <View style={styles.row}>
-        <TextInput 
-          placeholder="Set Course Goal.."
-          style={styles.inputs}
-          onChangeText={goalInputHandler}
-          value={enteredGoal}
-        />
-        <Button onPress={addGoalHandler} title="Add"/>
-      </View>
+      <GoalInput onAddGoal={addGoalHandler} />
       <FlatList 
         data={courseGoals}
         renderItem={itemData => (
-          <View style={styles.listItem}>
-            <Text>{itemData.item.value}</Text>
-          </View>
+          <GoalItem title={itemData.item.value} />
         )} 
       />
       <StatusBar style="auto" />
@@ -45,24 +33,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     color: '#333',
     alignItems: 'center',
-  },
-  inputs: {
-    width: 200,
-    padding: 5,
-    borderColor: 'black',
-    borderWidth: 1
-  },
-  row: {
-    flexDirection: 'row'
-  },
-  listItem: {
-    backgroundColor: 'lightgray',
-    padding: 5,
-    borderColor: 'black',
-    borderWidth: 1,
-    marginVertical: 15,
-    alignSelf: 'center',
-    width: 250,
-    color: 'white'
   }
 });
